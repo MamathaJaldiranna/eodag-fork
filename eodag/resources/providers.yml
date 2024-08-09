@@ -4954,8 +4954,8 @@
           "month": {startTimeFromAscendingNode#to_datetime_dict(list)}["month"],
           "day": {startTimeFromAscendingNode#to_datetime_dict(list)}["day"]
         }}
-      - $.properties.startDate
-    completionTimeFromAscendingNode: $.properties.endDate
+      - $.properties.startdate
+    completionTimeFromAscendingNode: $.properties.enddate
   anchor_hist_day_month_year: &hist_day_month_year
     startTimeFromAscendingNode:
       - |
