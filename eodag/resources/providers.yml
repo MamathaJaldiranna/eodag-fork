@@ -4964,8 +4964,8 @@
           "hmonth": {startTimeFromAscendingNode#to_datetime_dict(list)}["month"],
           "hday": {startTimeFromAscendingNode#to_datetime_dict(list)}["day"]
         }}
-      - $.properties.startDate
-    completionTimeFromAscendingNode: $.properties.endDate
+      - $.properties.startdate
+    completionTimeFromAscendingNode: $.properties.enddate
   anchor_year_month: &month_year
     startTimeFromAscendingNode:
       - |
@@ -4973,8 +4973,8 @@
           "year": {startTimeFromAscendingNode#to_datetime_dict(list)}["year"],
           "month": {startTimeFromAscendingNode#to_datetime_dict(list)}["month"]
         }}
-      - $.properties.startDate
-    completionTimeFromAscendingNode: $.properties.endDate
+      - $.properties.startdate
+    completionTimeFromAscendingNode: $.properties.enddate
   anchor_hist_year_month: &hist_month_year
     startTimeFromAscendingNode:
       - |
@@ -4982,8 +4982,8 @@
           "hyear": {startTimeFromAscendingNode#to_datetime_dict(list)}["year"],
           "hmonth": {startTimeFromAscendingNode#to_datetime_dict(list)}["month"]
         }}
-      - $.properties.startDate
-    completionTimeFromAscendingNode: $.properties.endDate
+      - $.properties.startdate
+    completionTimeFromAscendingNode: $.properties.enddate
   search: !plugin
     type: PostJsonSearch
     api_endpoint: https://gateway.prod.wekeo2.eu/hda-broker/api/v1/dataaccess/search
@@ -5186,8 +5186,8 @@
               "month": {startTimeFromAscendingNode#to_datetime_dict(list)}["month"],
               "day": {startTimeFromAscendingNode#to_datetime_dict(list)}["day"]
             }}
-          - $.properties.startDate
-        completionTimeFromAscendingNode: $.properties.endDate
+          - $.properties.startdate
+        completionTimeFromAscendingNode: $.properties.enddate
         orderLink: 'https://gateway.prod.wekeo2.eu/hda-broker/api/v1/dataaccess/download?{{"location": "{downloadLink}","product_id":"{id}", "dataset_id": "EO:ECMWF:DAT:SATELLITE_FIRE_BURNED_AREA"}}'
     SATELLITE_METHANE:
       productType: EO:ECMWF:DAT:SATELLITE_METHANE
@@ -5457,8 +5457,8 @@
             {{
               "hydrological_year": {startTimeFromAscendingNode#get_hydrological_year}
             }}
-          - $.properties.startDate
-        completionTimeFromAscendingNode: $.properties.endDate
+          - $.properties.startdate
+        completionTimeFromAscendingNode: $.properties.enddate
         version:
           - '{{"product_version": "{version}"}}'
           - '$.null'
@@ -5517,8 +5517,8 @@
               "day": {startTimeFromAscendingNode#to_datetime_dict(list)}["day"],
               "time": {startTimeFromAscendingNode#get_ecmwf_time}
             }}
-          - $.properties.startDate
-        completionTimeFromAscendingNode: $.properties.endDate
+          - $.properties.startdate
+        completionTimeFromAscendingNode: $.properties.enddate
         providerProductType:
           - '{{"product_type": {providerProductType}}}'
           - '$.null'
@@ -5543,8 +5543,8 @@
               "day": {startTimeFromAscendingNode#to_datetime_dict(list)}["day"],
               "time": {startTimeFromAscendingNode#get_ecmwf_time}
             }}
-          - $.properties.startDate
-        completionTimeFromAscendingNode: $.properties.endDate
+          - $.properties.startdate
+        completionTimeFromAscendingNode: $.properties.enddate
         providerProductType:
           - '{{"product_type": {providerProductType}}}'
           - '$.null'
@@ -5567,8 +5567,8 @@
               "year": {startTimeFromAscendingNode#to_datetime_dict(list)}["year"],
               "month": {startTimeFromAscendingNode#to_datetime_dict(list)}["month"]
             }}
-          - $.properties.startDate
-        completionTimeFromAscendingNode: $.properties.endDate
+          - $.properties.startdate
+        completionTimeFromAscendingNode: $.properties.enddate
         providerProductType:
           - '{{"product_type": {providerProductType}}}'
           - '$.null'
@@ -5593,8 +5593,8 @@
               "year": {startTimeFromAscendingNode#to_datetime_dict(list)}["year"],
               "month": {startTimeFromAscendingNode#to_datetime_dict(list)}["month"]
             }}
-          - $.properties.startDate
-        completionTimeFromAscendingNode: $.properties.endDate
+          - $.properties.startdate
+        completionTimeFromAscendingNode: $.properties.enddate
         providerProductType:
           - '{{"product_type": {providerProductType}}}'
           - '$.null'
@@ -5615,8 +5615,8 @@
               "day": {startTimeFromAscendingNode#to_datetime_dict(list)}["day"],
               "time": {startTimeFromAscendingNode#get_ecmwf_time}
             }}
-          - $.properties.startDate
-        completionTimeFromAscendingNode: $.properties.endDate
+          - $.properties.startdate
+        completionTimeFromAscendingNode: $.properties.enddate
         defaultGeometry: 'POLYGON((180 -90, 180 90, -180 90, -180 -90, 180 -90))'
         orderLink: 'https://gateway.prod.wekeo2.eu/hda-broker/api/v1/dataaccess/download?{{"location": "{downloadLink}","product_id":"{id}", "dataset_id": "EO:ECMWF:DAT:REANALYSIS_ERA5_LAND"}}'
     ERA5_LAND_MONTHLY:
@@ -5636,8 +5636,8 @@
               "year": {startTimeFromAscendingNode#to_datetime_dict(list)}["year"],
               "month": {startTimeFromAscendingNode#to_datetime_dict(list)}["month"]
             }}
-          - $.properties.startDate
-        completionTimeFromAscendingNode: $.properties.endDate
+          - $.properties.startdate
+        completionTimeFromAscendingNode: $.properties.enddate
         providerProductType:
           - '{{"product_type": {providerProductType}}}'
           - '$.null'
@@ -5676,8 +5676,8 @@
             {{
               "year": {startTimeFromAscendingNode#to_datetime_dict(list)}["year"]
             }}
-          - $.properties.startDate
-        completionTimeFromAscendingNode: $.properties.endDate
+          - $.properties.startdate
+        completionTimeFromAscendingNode: $.properties.enddate
         defaultGeometry: 'POLYGON((180 -90, 180 90, -180 90, -180 -90, 180 -90))'
         orderLink: 'https://gateway.prod.wekeo2.eu/hda-broker/api/v1/dataaccess/download?{{"location": "{downloadLink}","product_id":"{id}", "dataset_id": "EO:ECMWF:DAT:CAMS_GLOBAL_EMISSION_INVENTORIES"}}'
     CAMS_EAC4_MONTHLY:
