@@ -256,7 +256,8 @@ class DataRequestSearch(Search):
     def _create_data_request(
         self, product_type: str, eodag_product_type: str, **kwargs: Any
     ) -> str:
-        headers = getattr(self.auth, "headers", USER_AGENT)
+        headers = getattr(self.auth, "headers", {})
+        headers["User-Agent"] = USER_AGENT
         ssl_verify = getattr(self.config.ssl_verify, "ssl_verify", True)
         try:
             url = self.config.data_request_url
@@ -285,7 +286,8 @@ class DataRequestSearch(Search):
     def _cancel_request(self, data_request_id: str) -> None:
         logger.info("deleting request job %s", data_request_id)
         delete_url = f"{self.config.data_request_url}/{data_request_id}"
-        headers = getattr(self.auth, "headers", USER_AGENT)
+        headers = getattr(self.auth, "headers", {})
+        headers["User-Agent"] = USER_AGENT
         try:
             delete_resp = requests.delete(
                 delete_url, headers=headers, timeout=HTTP_REQ_TIMEOUT
@@ -299,7 +301,8 @@ class DataRequestSearch(Search):
     def _check_request_status(self, data_request_id: str) -> bool:
         logger.debug("checking status of request job %s", data_request_id)
         status_url = self.config.status_url + data_request_id
-        headers = getattr(self.auth, "headers", USER_AGENT)
+        headers = getattr(self.auth, "headers", {})
+        headers["User-Agent"] = USER_AGENT
         ssl_verify = getattr(self.config, "ssl_verify", True)
 
         try:
@@ -337,7 +340,8 @@ class DataRequestSearch(Search):
             jobId=data_request_id, items_per_page=items_per_page, page=page
         )
         ssl_verify = getattr(self.config, "ssl_verify", True)
-        headers = getattr(self.auth, "headers", USER_AGENT)
+        headers = getattr(self.auth, "headers", {})
+        headers["User-Agent"] = USER_AGENT
         try:
             return requests.get(
                 url, headers=headers, timeout=HTTP_REQ_TIMEOUT, verify=ssl_verify
