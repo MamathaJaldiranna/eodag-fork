@@ -612,22 +612,60 @@ class Download(PluginTopic):
                 # another output for notebooks
                 nb_info = NotebookWidgets()
 
+                # Define specific retry limits for different errors
+                error_retry_limits = {
+                    NotAvailableError: 5,
+                    AuthenticationError: 0,
+                    MisconfiguredError: 1,
+                    NotADirectoryError: 0
+                }
+
+                # Initialize retry counters for each error type
+                retry_counters = {error: 0 for error in error_retry_limits}
+                non_retriable_errors = tuple(error_retry_limits.keys())
+
                 while "Loop until products download succeeds or timeout is reached":
                     datetime_now = datetime.now()
-
+                    # Check for Retry Conditions
                     if datetime_now >= product.next_try:
                         product.next_try += timedelta(minutes=wait)
                         try:
                             return download(*args, **kwargs)
 
-                        except NotAvailableError as e:
-                            if not getattr(self.config, "order_enabled", False):
-                                raise NotAvailableError(
-                                    f"Product is not available for download and order is not supported for"
-                                    f" {self.provider}, {e}"
-                                )
-                            not_available_info = str(e)
+                        except non_retriable_errors as e:
+                            error_type = type(e)
+                            retry_counters[error_type] += 1
+                            max_retries_for_error = error_retry_limits[error_type]
 
+                            if retry_counters[error_type] > max_retries_for_error:
+                                logger.error(
+                                    f"Max retries exceeded for {error_type.__name__}: {retry_counters[error_type]}"
+                                )
+                                raise e  # Stop retrying and raise the error
+
+                            logger.info(
+                                f"Retrying due to {error_type.__name__}: {str(e)} "
+                                f"(Retry {retry_counters[error_type]}/{max_retries_for_error})"
+                            )
+
+                            error_message = str(e)
+                            # Handle specific errors and their messages
+                            if isinstance(e, NotAvailableError):
+                                if not getattr(self.config, "order_enabled", False):
+                                    raise NotAvailableError(
+                                        f"Product is not available for download and order is not supported for"
+                                        f" {self.provider}, {e}"
+                                    )
+                            elif isinstance(e, NotADirectoryError):
+                                if "Not a directory" in error_message:
+                                    raise NotADirectoryError(
+                                        f"Product cant be downloaded as the output directory is not a directory."
+                                        f" {self.provider}, {e}"
+                                    )
+                            not_available_info = error_message
+                        
+                    
+                    # Wait and Retry Logic
                     if datetime_now >= product.next_try and datetime_now < stop_time:
                         wait_seconds: Union[float, int] = (
                             datetime_now - product.next_try + timedelta(minutes=wait)
@@ -650,6 +688,7 @@ class Download(PluginTopic):
                         logger.debug(retry_info)
                         nb_info.display_html(retry_info)
                         product.next_try = datetime_now
+                    # Timeout Handling
                     elif datetime_now < product.next_try and datetime_now < stop_time:
                         wait_seconds = (product.next_try - datetime_now).seconds + (
                             product.next_try - datetime_now
@@ -672,6 +711,7 @@ class Download(PluginTopic):
                         logger.debug(retry_info)
                         nb_info.display_html(retry_info)
                         sleep(wait_seconds)
+
                     elif datetime_now >= stop_time and timeout > 0:
                         if "storageStatus" not in product.properties:
                             product.properties["storageStatus"] = "N/A status"
@@ -680,6 +720,7 @@ class Download(PluginTopic):
                             f"{product.properties['title']} is not available ({product.properties['storageStatus']})"
                             f" and could not be downloaded, timeout reached"
                         )
+                    
                     elif datetime_now >= stop_time:
                         raise NotAvailableError(not_available_info)
 

@@ -1446,6 +1446,33 @@ class TestDownloadPluginHttpRetry(BaseDownloadPluginTest):
 
         run()
 
+    def test_plugins_download_invalid_output_dir(self):
+        """HTTPDownload.download() must not retry on invalid outputs_prefix"""
+        @responses.activate(registry=responses.registries.FirstMatchRegistry)
+        def run():
+            print("Running test_plugins_download_invalid_output_dir...")
+            # create a output_dir which is not a directory to generate error.
+            dir_name = os.path.join(self.output_dir, 'abc.yml')
+            f = open(dir_name, "x")
+            f.close()
+
+            url = "http://somewhere/?issuerId=peps"
+            responses.add(responses.GET, url, status=400)  # Simulate a Bad Request due to invalid output_dir
+
+            # Simulate calling the download method with a file path instead of a directory
+            with self.assertRaisesRegex(NotADirectoryError, r".*Not a directory"):
+                self.plugin.download(
+                    self.product,
+                    output_dir=os.path.join(dir_name),
+                    wait=-1,
+                    timeout=-1
+                )
+
+            # Verify that there was only one attempt to download
+            self.assertEqual(len(responses.calls), 0)
+            print("Test completed successfully.")
+
+        run()
 
 class TestDownloadPluginAws(BaseDownloadPluginTest):
     def setUp(self):
